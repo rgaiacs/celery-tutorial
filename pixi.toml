@@ -1,0 +1,11 @@
+[project]
+name = "celery-tutorial"
+version = "0.1.0"
+description = "Add a short description here"
+authors = ["Raniere Silva <Raniere.CostadaSilva@gesis.org>"]
+channels = ["conda-forge"]
+platforms = ["linux-64"]
+
+[tasks]
+
+[dependencies]
