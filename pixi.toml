@@ -9,3 +9,4 @@ platforms = ["linux-64"]
 [tasks]
 
 [dependencies]
+celery = ">=5.3.6,<5.4"
