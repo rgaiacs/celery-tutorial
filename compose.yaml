@@ -1,0 +1,26 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3.13-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: celery
+      RABBITMQ_DEFAULT_PASS: 123
+
+  app:
+    depends_on:
+      - rabbitmq
+    build:
+      context: .
+      target: pixi
+    volumes:
+      - type: bind
+        source: .
+        target: /usr/app
+      - pixi-cache:/usr/app/.pixi
+    environment:
+      RABBITMQ_DEFAULT_USER: celery
+      RABBITMQ_DEFAULT_PASS: 123
+    command: >
+      bash -c "pixi install && pixi run start"
+
+volumes:
+  pixi-cache:
