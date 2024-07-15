@@ -11,3 +11,12 @@ start = {cwd = "src", cmd = "celery -A tasks worker --loglevel=INFO"}
 
 [dependencies]
 celery = ">=5.3.6,<5.4"
+
+[feature.formatter.dependencies]
+ruff = "*"
+
+[feature.formatter.tasks]
+format = "ruff format"
+
+[environments]
+dev = ["formatter"]
