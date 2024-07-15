@@ -7,7 +7,7 @@ from celery.signals import task_postrun
 
 @shared_task(ignore_result=False)
 def add(a, b):
-    time.sleep(random.randint(5, 30))
+    time.sleep(random.randint(20, 30))
     return a + b
 
 @task_postrun.connect(sender=add)

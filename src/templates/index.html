@@ -25,25 +25,17 @@
       })
         .then(response => response.json())
         .then(data => {
-          report(null)
+            console.log(data);
 
-          const poll = () => {
-            fetch(`/tasks/result/${data["result_id"]}`)
-              .then(response => response.json())
-              .then(data => {
-                report(data)
+            const evtSource = new EventSource(`/tasks/sse/${data.result_id}`);
+          
+            evtSource.onmessage = (e) => {
+                console.log("new event", e);
+                // const newElement = document.createElement("li");
 
-                if (!data["ready"]) {
-                  setTimeout(poll, 500)
-                } else if (!data["successful"]) {
-                  console.error(formName, data)
-                }
-              })
-          }
-
-          if (doPoll) {
-            poll()
-          }
+                // newElement.textContent = `message: ${e.data}`;
+                // eventList.appendChild(newElement);
+            };
         })
     })
   }
