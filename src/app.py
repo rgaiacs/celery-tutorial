@@ -18,7 +18,7 @@ def create_app():
 
     @app.route("/")
     def index():
-        return {"status": "OK"}
+        return render_template("index.html")
 
     import views
 
