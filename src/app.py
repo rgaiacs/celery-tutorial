@@ -20,6 +20,10 @@ def create_app():
     def index():
         return {"status": "OK"}
 
+    import views
+
+    app.register_blueprint(views.bp)
+
     return app
 
 
