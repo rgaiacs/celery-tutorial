@@ -1,4 +1,11 @@
 services:
+  # On 20 March 2024, Redis moved away from the BSD license.
+  # The last Redis release under the BSD license was version 7.2.4.
+  #
+  # In the future, we might want to move to https://valkey.io/
+  redis:
+    image: redis:7.2.4-alpine3.19
+
   rabbitmq:
     image: rabbitmq:3.13-alpine
     environment:
