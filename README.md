@@ -8,25 +8,34 @@ My study notes of [Celery](https://github.com/celery/celery)'s [Getting Started]
 docker compose up
 ```
 
-Now, you can access the Docker container using
-
 ```bash
-docker compose exec -it app /bin/bash
+curl http://localhost:5000
+```
+
+```
+{
+  "status": "OK"
+}
 ```
 
 ```bash
-cd src
+curl -X POST http://localhost:5000/tasks/add -d "a=1&b=1"
+```
+
+```
+{
+  "result_id": "3500b5a8-7b1c-4d8f-9663-b4861aadb05a"
+}
 ```
 
 ```bash
-pixi run python
+curl http://localhost:5000/tasks/result/3500b5a8-7b1c-4d8f-9663-b4861aadb05a
 ```
 
-```python
-from tasks import add
-
-result = add.delay(4, 4)
-
-result.ready()
-result.get()
+```
+{
+  "ready": true,
+  "successful": true,
+  "value": 2
+}
 ```
