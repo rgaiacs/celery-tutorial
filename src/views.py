@@ -2,7 +2,7 @@ from celery.result import AsyncResult
 from flask import Blueprint
 from flask import request
 
-from . import tasks
+import tasks
 
 bp = Blueprint("tasks", __name__, url_prefix="/tasks")
 
