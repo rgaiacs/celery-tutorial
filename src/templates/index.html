@@ -30,7 +30,7 @@
             const evtSource = new EventSource(`/tasks/sse/${data.result_id}`);
 
             evtSource.onerror = (err) => {
-              console.debug("Closing Server Sent Events connection!")
+              console.debug("Closing Server Sent Events connection!", err)
               
               // We might close the connection here on the bases that the connection ended because no more data will be send.
               evtSource.close();
@@ -38,14 +38,14 @@
           
             evtSource.onmessage = (event) => {
               message = JSON.parse(event.data);
-              if (message.status === "SUCCESS") {
+              if (message.state === "SUCCESS") {
                 console.debug (`Result: ${message.result}`);
                 
                 // We must close the connection here!
                 evtSource.close();
               }
               else {
-                console.debug(`Stagus: ${message.status}`);
+                console.debug(`State: ${message.state}`);
               }
             };
         })
