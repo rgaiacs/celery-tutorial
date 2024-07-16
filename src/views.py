@@ -54,3 +54,11 @@ def add():
     b = request.form.get("b", type=int)
     result = tasks.add.delay(a, b)
     return {"result_id": result.id}
+
+
+@bp.post("/all")
+def all():
+    a = request.form.get("a", type=int)
+    b = request.form.get("b", type=int)
+    result = tasks.all.delay(a, b)
+    return {"result_id": result.id}
