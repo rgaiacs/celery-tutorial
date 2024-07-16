@@ -14,6 +14,7 @@ start_web = {cwd = "src", cmd = "flask run --debug --host 0.0.0.0"}
 celery = ">=5.3.6,<5.4"
 redis-py = ">=5.0.7,<5.1"
 flask = ">=3.0.3,<3.1"
+flower = ">=2.0.1,<2.1"
 
 [feature.formatter.dependencies]
 ruff = "*"
