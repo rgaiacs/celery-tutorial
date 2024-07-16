@@ -7,14 +7,22 @@
 <body>
 <h1>Celery Example</h1>
 <p>Execute background tasks with Celery. Submits tasks and shows results using JavaScript.</p>
-<h2>Add</h2>
-<p>Start a task to add two numbers, then poll for the result.
-<form id=add method=post action="{{ url_for("tasks.all") }}">
+<h2>Multiply</h2>
+<p>Start a task to multiply two numbers, then poll for the result.</p>
+<form id=mul method=post action="{{ url_for("tasks.mul") }}">
   <label>A <input type=number name=a value=4></label><br>
   <label>B <input type=number name=b value=2></label><br>
   <input type=submit>
 </form>
-<p>Result: <span id=add-result></span></p>
+<p>Result: <span id=mul-result></span></p>
+<h2>All</h2>
+<p>Start a task to add two numbers and have the resulted squared, then poll for the result.</p>
+<form id=all method=post action="{{ url_for("tasks.all") }}">
+  <label>A <input type=number name=a value=4></label><br>
+  <label>B <input type=number name=b value=2></label><br>
+  <input type=submit>
+</form>
+<p>Result: <span id=all-result></span></p>
 <script>
   const taskForm = (formName, doPoll, report) => {
     document.forms[formName].addEventListener("submit", (event) => {
@@ -37,6 +45,7 @@
             }
           
             evtSource.onmessage = (event) => {
+              console.debug(event);
               message = JSON.parse(event.data);
               if (message.state === "SUCCESS") {
                 console.debug (`Result: ${message.result}`);
@@ -52,8 +61,22 @@
     })
   }
 
-  taskForm("add", true, data => {
-    const el = document.getElementById("add-result")
+  taskForm("mul", true, data => {
+    const el = document.getElementById("mul-result")
+
+    if (data === null) {
+      el.innerText = "submitted"
+    } else if (!data["ready"]) {
+      el.innerText = "waiting"
+    } else if (!data["successful"]) {
+      el.innerText = "error, check console"
+    } else {
+      el.innerText = data["value"]
+    }
+  })
+
+  taskForm("all", true, data => {
+    const el = document.getElementById("all-result")
 
     if (data === null) {
       el.innerText = "submitted"

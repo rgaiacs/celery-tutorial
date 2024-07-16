@@ -23,8 +23,27 @@ def task_add_postrun_notifier(sender=None, **kwargs):
     print("From task_add_postrun_notifier ==> Ok, done!")
 
 
-@shared_task(ignore_result=False)
-def mul(a, b):
+@shared_task(bind=True, ignore_result=False)
+def mul(self, a, b):
+    task = self
+
+    task.update_state(
+        state="PHASE1",
+        meta={
+            "current": 20,
+            "total": 100,
+        },
+    )
+    time.sleep(random.randint(5, 10))
+    task.update_state(
+        state="PHASE2",
+        meta={
+            "current": 40,
+            "total": 100,
+        },
+    )
+    time.sleep(random.randint(5, 10))
+
     logger.info("Scheduling to multiply %d + %d" % (a, b))
     time.sleep(random.randint(2, 3))
     logger.info("Multiplying %d + %d" % (a, b))

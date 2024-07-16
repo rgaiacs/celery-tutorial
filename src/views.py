@@ -35,16 +35,17 @@ def poll_result(id):
     # This is a generator and yield should be used to return data
     result = AsyncResult(id)
 
-    while result.state in ["PENDING", "STARTED"]:
-        data = {"state": result.state}
+    while result.state != "SUCCESS":
+        data = {"state": result.state, "info": result.info}
         yield f"data: {json.dumps(data)}\n\n"
         time.sleep(1)
 
         # Update for while
         result = AsyncResult(id)
+        current_app.logger.error(result.parent)
 
     if result.state == "SUCCESS":
-        data = {"state": result.state, "result": result.result}
+        data = {"state": result.state, "info": result.info, "result": result.result}
         yield f"data: {json.dumps(data)}\n\n"
     else:
         data = {"state": result.state}
@@ -58,11 +59,11 @@ def result_sse(id):
     return Response(poll_result(id), mimetype="text/event-stream")
 
 
-@bp.post("/add")
-def add():
+@bp.post("/mul")
+def mul():
     a = request.form.get("a", type=int)
     b = request.form.get("b", type=int)
-    result = tasks.add.delay(a, b)
+    result = tasks.mul.delay(a, b)
     return {"result_id": result.id}
 
 
