@@ -1,7 +1,10 @@
+import json
 import time
 
 from celery.result import AsyncResult
+
 from flask import Blueprint
+from flask import current_app
 from flask import request
 from flask import Response
 
@@ -20,23 +23,29 @@ def result(id):
         "value": result.get() if ready else result.result,
     }
 
+
 def poll_result(id):
     result = AsyncResult(id)
 
     while result.status in ["PENDING", "STARTED"]:
-        yield f"data: {result.status}\n"
+        data = {"status": result.status}
+        yield f"data: {json.dumps(data)}\n\n"
         time.sleep(5)
 
-    if result.status == "SUCCESS":
-        return f"data: {result.result}\n"
-    else:
-        return "data: {FAIL}\n"
+        # Update for while
+        result = AsyncResult(id)
 
+    if result.status == "SUCCESS":
+        data = {"status": result.status, "result": result.result}
+        return f"data: {json.dumps(data)}\n\n"
+    else:
+        data = {"status": result.status}
+        return f"data: {json.dumps(data)}\n\n"
 
 
 @bp.get("/sse/<id>")
 def result_sse(id):
-    return Response(poll_result(id), mimetype='text/event-stream')
+    return Response(poll_result(id), mimetype="text/event-stream")
 
 
 @bp.post("/add")

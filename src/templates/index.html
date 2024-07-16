@@ -28,13 +28,25 @@
             console.log(data);
 
             const evtSource = new EventSource(`/tasks/sse/${data.result_id}`);
-          
-            evtSource.onmessage = (e) => {
-                console.log("new event", e);
-                // const newElement = document.createElement("li");
 
-                // newElement.textContent = `message: ${e.data}`;
-                // eventList.appendChild(newElement);
+            evtSource.onerror = (err) => {
+              console.debug("Closing Server Sent Events connection!")
+              
+              // We might close the connection here on the bases that the connection ended because no more data will be send.
+              evtSource.close();
+            }
+          
+            evtSource.onmessage = (event) => {
+              message = JSON.parse(event.data);
+              if (message.status === "SUCCESS") {
+                console.debug (`Result: ${message.result}`);
+                
+                // We must close the connection here!
+                evtSource.close();
+              }
+              else {
+                console.debug(`Stagus: ${message.status}`);
+              }
             };
         })
     })
