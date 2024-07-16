@@ -7,6 +7,7 @@ from flask import Blueprint
 from flask import current_app
 from flask import request
 from flask import Response
+from flask import stream_with_context
 
 import tasks
 
@@ -24,23 +25,32 @@ def result(id):
     }
 
 
+# To debug,
+#
+# @stream_with_context
+# def poll_result(id):
+#     current_app.logger.error(result)
+@stream_with_context
 def poll_result(id):
+    # This is a generator and yield should be used to return data
     result = AsyncResult(id)
 
-    while result.status in ["PENDING", "STARTED"]:
-        data = {"status": result.status}
+    while result.state in ["PENDING", "STARTED"]:
+        data = {"state": result.state}
         yield f"data: {json.dumps(data)}\n\n"
-        time.sleep(5)
+        time.sleep(1)
 
         # Update for while
         result = AsyncResult(id)
 
-    if result.status == "SUCCESS":
-        data = {"status": result.status, "result": result.result}
-        return f"data: {json.dumps(data)}\n\n"
+    if result.state == "SUCCESS":
+        data = {"state": result.state, "result": result.result}
+        yield f"data: {json.dumps(data)}\n\n"
     else:
-        data = {"status": result.status}
-        return f"data: {json.dumps(data)}\n\n"
+        data = {"state": result.state}
+        yield f"data: {json.dumps(data)}\n\n"
+
+    # Connection ends here.
 
 
 @bp.get("/sse/<id>")
