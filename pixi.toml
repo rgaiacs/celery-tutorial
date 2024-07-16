@@ -8,6 +8,7 @@ platforms = ["linux-64"]
 
 [tasks]
 start_worker = {cwd = "src", cmd = "celery -A worker worker --loglevel=INFO"}
+start_flower = {cwd = "src", cmd = "celery --broker=pyamqp://celery:123@rabbitmq/ flower"}
 start_web = {cwd = "src", cmd = "flask run --debug --host 0.0.0.0"}
 
 [dependencies]
