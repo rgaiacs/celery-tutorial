@@ -60,5 +60,6 @@ def add():
 def all():
     a = request.form.get("a", type=int)
     b = request.form.get("b", type=int)
-    result = tasks.all.delay(a, b)
+    lazy_chain = tasks.all(a, b)
+    result = lazy_chain.apply_async()
     return {"result_id": result.id}

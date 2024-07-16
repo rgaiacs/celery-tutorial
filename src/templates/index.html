@@ -9,7 +9,7 @@
 <p>Execute background tasks with Celery. Submits tasks and shows results using JavaScript.</p>
 <h2>Add</h2>
 <p>Start a task to add two numbers, then poll for the result.
-<form id=add method=post action="{{ url_for("tasks.add") }}">
+<form id=add method=post action="{{ url_for("tasks.all") }}">
   <label>A <input type=number name=a value=4></label><br>
   <label>B <input type=number name=b value=2></label><br>
   <input type=submit>

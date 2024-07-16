@@ -50,4 +50,4 @@ def task_square_postrun_notifier(sender=None, **kwargs):
 
 
 def all(a, b):
-    return chain(add.s(a, b), square())
+    return chain(add.s(a, b), square.s())
