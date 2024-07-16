@@ -13,7 +13,7 @@ logger = get_task_logger(__name__)
 @shared_task(ignore_result=False)
 def add(a, b):
     logger.info("Scheduling to add %d + %d" % (a, b))
-    time.sleep(random.randint(20, 30))
+    time.sleep(random.randint(2, 3))
     logger.info("Adding %d + %d" % (a, b))
     return a + b
 
@@ -26,7 +26,7 @@ def task_add_postrun_notifier(sender=None, **kwargs):
 @shared_task(ignore_result=False)
 def mul(a, b):
     logger.info("Scheduling to multiply %d + %d" % (a, b))
-    time.sleep(random.randint(20, 30))
+    time.sleep(random.randint(2, 3))
     logger.info("Multiplying %d + %d" % (a, b))
     return a + b
 
@@ -39,7 +39,7 @@ def task_mul_postrun_notifier(sender=None, **kwargs):
 @shared_task(ignore_result=False)
 def square(a):
     logger.info("Scheduling to square %d" % a)
-    time.sleep(random.randint(20, 30))
+    time.sleep(random.randint(2, 3))
     logger.info("Squaring %d" % a)
     return a * a
 
