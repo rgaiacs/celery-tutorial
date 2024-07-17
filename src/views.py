@@ -30,7 +30,6 @@ def result(id):
 # @stream_with_context
 # def poll_result(id):
 #     current_app.logger.error(result)
-@stream_with_context
 def poll_result(id):
     # This is a generator and yield should be used to return data
     result = AsyncResult(id)
@@ -42,7 +41,6 @@ def poll_result(id):
 
         # Update for while
         result = AsyncResult(id)
-        current_app.logger.error(result.parent)
 
     if result.state == "SUCCESS":
         data = {"state": result.state, "info": result.info, "result": result.result}
