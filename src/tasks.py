@@ -6,6 +6,7 @@ from celery import chain
 from celery.signals import task_postrun
 from celery.utils.log import get_task_logger
 
+import util
 
 logger = get_task_logger(__name__)
 
@@ -44,10 +45,10 @@ def mul(self, a, b):
     )
     time.sleep(random.randint(5, 10))
 
-    logger.info("Scheduling to multiply %d + %d" % (a, b))
+    logger.info("Scheduling to multiply %d x %d" % (a, b))
     time.sleep(random.randint(2, 3))
-    logger.info("Multiplying %d + %d" % (a, b))
-    return a + b
+    logger.info("Multiplying %d x %d" % (a, b))
+    return util.mul(a, b)
 
 
 @task_postrun.connect(sender=mul)
